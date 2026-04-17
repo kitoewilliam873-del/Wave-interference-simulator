@@ -1,0 +1,49 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
+# Create grid
+x = np.linspace(-10, 10, 200)
+y = np.linspace(-10, 10, 200)
+
+X, Y = np.meshgrid(x, y)
+
+# Source positions
+x1, y1 = -3, 0
+x2, y2 = 3, 0
+
+# Wave parameters
+k = 2
+omega = 2
+
+# Create figure
+fig, ax = plt.subplots()
+
+# Initial plot
+Z = np.zeros_like(X)
+image = ax.imshow(Z, extent=[-10,10,-10,10], origin='lower')
+
+plt.colorbar(image)
+
+def update(frame):
+    t = frame * 0.1
+    
+    r1 = np.sqrt((X - x1)**2 + (Y - y1)**2)
+    r2 = np.sqrt((X - x2)**2 + (Y - y2)**2)
+    
+    Z = np.sin(k*r1 - omega*t) + np.sin(k*r2 - omega*t)
+    
+    image.set_array(Z)
+    
+    return [image]
+
+ani = animation.FuncAnimation(
+    fig,
+    update,
+    frames=100,
+    interval=50
+)
+
+plt.title("Animated Wave Interference")
+
+plt.show()
